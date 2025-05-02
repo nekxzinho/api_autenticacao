@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: texturasprivates-api
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn api_autenticacao:app
+    autoDeploy: true
