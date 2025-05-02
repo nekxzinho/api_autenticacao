@@ -3,18 +3,21 @@ import json
 
 app = Flask(__name__)
 
-# Carrega IPs autorizados de um arquivo JSON externo
-def carregar_ips():
+# Carrega IPs e texturas autorizadas
+def carregar_configuracoes():
     with open("ip_autorizados.json", "r") as f:
-        return set(json.load(f))
+        return json.load(f)
 
-IPS_AUTORIZADOS = carregar_ips()
+CONFIGS = carregar_configuracoes()
 
 @app.route('/api/verificar-ip', methods=['GET'])
 def verificar_ip():
     ip_cliente = request.args.get("ip")
-    if ip_cliente in IPS_AUTORIZADOS:
-        return jsonify({"status": "autorizado"}), 200
+    if ip_cliente in CONFIGS:
+        return jsonify({
+            "status": "autorizado",
+            "textura": CONFIGS[ip_cliente]
+        }), 200
     else:
         return jsonify({"status": "negado"}), 403
 
